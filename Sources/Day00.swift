@@ -1,25 +1,60 @@
 import Algorithms
 
-struct Day00: AdventDay {
-  // Save your data in a corresponding text file in the `Data` directory.
+struct Day00: AdventDay {  
+
+  init(data: String) {
+    self.data = data
+  }
+  
+
   var data: String
 
-  // Splits input data into its component parts and convert from string.
-  var entities: [[Int]] {
+  var entities: [String] {
     data.split(separator: "\n\n").map {
-      $0.split(separator: "\n").compactMap { Int($0) }
+      String($0)
     }
   }
-
-  // Replace this with your solution for the first part of the day's challenge.
-  func part1() -> Any {
-    // Calculate the sum of the first set of input data
-    entities.first?.reduce(0, +) ?? 0
+  
+  var firstList: [Int] {
+    entities.flatMap({
+      $0
+        .split(separator: "\n")
+        .map({ String($0) })
+        .compactMap({
+          let num = Int($0.split(separator: " ")
+          .first ?? "")
+          return num
+        })
+    }).sorted()
+  }
+  
+  var secondList: [Int] {
+    entities.flatMap({
+      $0
+        .split(separator: "\n")
+        .map({ String($0) })
+        .compactMap({ Int($0.split(separator: " ")
+          .last ?? "") })
+    }).sorted()
   }
 
-  // Replace this with your solution for the second part of the day's challenge.
+  func part1() -> Any {
+    return firstList.indices.map({ abs(firstList[$0] - secondList[$0])}).reduce(0, { x,y in x + y })
+  }
+
+  
+
   func part2() -> Any {
-    // Sum the maximum entries in each set of data
-    entities.map { $0.max() ?? 0 }.reduce(0, +)
+    var counts: [Int?: Int] = [:]
+    firstList.forEach { key in
+      secondList.forEach { lookUpKey in
+        if key == lookUpKey {
+          counts[key] = (counts[key] ?? 0) + 1
+        }
+      }
+    }
+    return counts.map({ (key: Int?, value: Int) in
+      (key ?? 0) * value
+    }).reduce(0, { x,y in x + y })
   }
 }

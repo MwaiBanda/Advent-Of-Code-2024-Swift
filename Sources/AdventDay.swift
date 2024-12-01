@@ -49,9 +49,6 @@ extension AdventDay {
 
   // Default implementation of `part2`, so there aren't interruptions before
   // working on `part1()`.
-  func part2() throws -> Answer {
-    throw PartUnimplemented(day: day, part: 2)
-  }
 
   /// An initializer that loads the test data from the corresponding data file.
   init() {
